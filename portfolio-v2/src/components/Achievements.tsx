@@ -15,6 +15,28 @@ const getIcon = (title: string) => {
 export default function Achievements() {
   return (
     <section id="achievements" className="py-32 relative overflow-hidden bg-bg">
+      {/* Decorative Background */}
+      <div className="absolute inset-0 pointer-events-none overflow-hidden opacity-[0.02]">
+        <motion.div 
+          animate={{ scale: [1, 1.1, 1], opacity: [0.3, 0.6, 0.3] }}
+          transition={{ duration: 8, repeat: Infinity }}
+          className="absolute -top-20 -left-20"
+        >
+          <FiAward size={600} />
+        </motion.div>
+        <div className="absolute top-1/2 right-0 grid grid-cols-2 gap-20 p-20">
+          {[...Array(6)].map((_, i) => (
+            <motion.div 
+              key={i}
+              animate={{ y: [0, -30, 0] }}
+              transition={{ duration: 5 + i, repeat: Infinity, ease: "easeInOut" }}
+            >
+              <FiStar size={100} />
+            </motion.div>
+          ))}
+        </div>
+      </div>
+
       <Container>
         <div className="mb-20 space-y-4">
           <h2 className="text-3xl md:text-5xl font-black text-white uppercase tracking-tighter">

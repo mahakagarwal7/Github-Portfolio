@@ -18,6 +18,8 @@ export const metadata: Metadata = {
 import Scene from "@/components/3d/Scene";
 import ScrollRing from "@/components/3d/ScrollRing";
 import TechIconBackground from "@/components/TechIconBackground";
+import CommandPalette from "@/components/CommandPalette";
+import SystemHUD from "@/components/SystemHUD";
 
 export default function RootLayout({
   children,
@@ -41,6 +43,8 @@ export default function RootLayout({
               {children}
             </main>
 
+            <CommandPalette />
+            <SystemHUD />
             <ScrollRing />
             <FloatingBar />
             <AnalyticsTracker />

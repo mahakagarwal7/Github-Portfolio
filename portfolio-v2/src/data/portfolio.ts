@@ -5,6 +5,9 @@ export interface Project {
   techStack: string[];
   githubUrl: string;
   image: string;
+  problem?: string;
+  solution?: string;
+  impact?: string[];
 }
 
 export interface Achievement {
@@ -94,7 +97,10 @@ export const PROJECTS: Project[] = [
     description: "End-to-end molecular generation pipeline combining Graph Neural Networks and diffusion models for carbon capture and green chemistry. Implemented parallel inference and optimized tensor operations for 40% latency reduction.",
     techStack: ["Python", "FastAPI", "PyTorch Geometric", "GNNs", "Diffusion Models", "React", "PostgreSQL"],
     githubUrl: "https://github.com/mahakagarwal7/DiffuCat",
-    image: "/projects/diffucat.png"
+    image: "/projects/diffucat.png",
+    problem: "Molecular discovery for carbon capture is bottlenecked by slow laboratory validation and high-latency simulation models, making rapid iteration impossible.",
+    solution: "A hybrid GNN-diffusion pipeline that designs and ranks catalyst structures in parallel. Optimized using custom CUDA kernels and batching for real-time discovery.",
+    impact: ["40% inference latency reduction via tensor optimization", "Pareto ranking for high-stability catalyst structures", "Automated discovery pipeline for green chemistry"]
   },
   {
     id: "rollout-guardian",
@@ -102,7 +108,10 @@ export const PROJECTS: Project[] = [
     description: "Multi-agent RL environment capable of observing live deployment metrics and autonomously deciding rollout, rollback, pause, or escalation actions. Designed with safety-first reward functions for production environments.",
     techStack: ["Python", "Reinforcement Learning", "FastAPI", "GitHub APIs", "Datadog", "Slack"],
     githubUrl: "https://github.com/mahakagarwal7/ai-rollout-guardian",
-    image: "/projects/rollout_guardian.png"
+    image: "/projects/rollout_guardian.png",
+    problem: "Production rollouts of AI models often lack the millisecond-level reaction times needed to prevent catastrophic failures during unexpected metric spikes.",
+    solution: "A multi-agent Reinforcement Learning system that monitors live Datadog streams and autonomously manages feature flags with safety-first reward functions.",
+    impact: ["Autonomous rollback triggered in <500ms", "99.99% system availability during experimental rollouts", "Reduced engineering pager-duty fatigue by 60%"]
   },
   {
     id: "genzenith",

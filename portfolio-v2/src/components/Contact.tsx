@@ -17,6 +17,16 @@ export default function Contact() {
 
   return (
     <section id="contact" className="py-32 relative overflow-hidden bg-bg">
+      {/* Decorative Background */}
+      <div className="absolute inset-0 pointer-events-none overflow-hidden opacity-[0.03]">
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[150%] h-[150%] rotate-12">
+          <div className="w-full h-full border-[1px] border-dashed border-white/20 rounded-full animate-[spin_60s_linear_infinite]" />
+          <div className="absolute inset-20 border-[1px] border-dashed border-white/10 rounded-full animate-[spin_40s_linear_infinite_reverse]" />
+          <div className="absolute inset-40 border-[1px] border-dashed border-white/5 rounded-full animate-[spin_80s_linear_infinite]" />
+        </div>
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,#00ffa3_0.5px,transparent_0.5px)] bg-[size:100px_100px]" />
+      </div>
+
       <Container>
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-20">
           
