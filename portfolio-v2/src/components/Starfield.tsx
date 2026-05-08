@@ -61,7 +61,6 @@ export default function Starfield() {
     <canvas
       ref={canvasRef}
       className="fixed inset-0 pointer-events-none z-[-1] opacity-50"
-      style={{ background: "#1d1d1d" }}
     />
   );
 }

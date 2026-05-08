@@ -1,66 +1,125 @@
 "use client";
 
+import React, { useEffect, useState } from "react";
+import { FaHome, FaBriefcase, FaCode, FaEnvelope, FaGithub, FaLinkedinIn } from "react-icons/fa";
 import { motion } from "framer-motion";
-import { Home, User, Briefcase, Code, Mail, Cpu, Globe } from "lucide-react";
-import { FaLinkedinIn, FaGithub } from "react-icons/fa";
-import { useState } from "react";
 
 const navItems = [
-  { icon: <Home size={22} />, label: "HOME", href: "#home" },
-  { icon: <User size={22} />, label: "ABOUT", href: "#about" },
-  { icon: <Cpu size={22} />, label: "SKILLS", href: "#skills" },
-  { icon: <Briefcase size={22} />, label: "EXPERIENCE", href: "#experience" },
-  { icon: <Code size={22} />, label: "PROJECTS", href: "#projects" },
-  { icon: <Mail size={22} />, label: "CONTACT", href: "#contact" },
+  { id: "home", icon: <FaHome />, label: "Home" },
+  { id: "github-stats", icon: <FaCode />, label: "Stats" },
+  { id: "projects", icon: <FaBriefcase />, label: "Projects" },
+  { id: "experience", icon: <FaBriefcase />, label: "Journey" },
+  { id: "skills", icon: <FaCode />, label: "Skills" },
+  { id: "contact", icon: <FaEnvelope />, label: "Contact" },
 ];
 
 export default function Navigation() {
-  const [active, setActive] = useState("HOME");
+  const [activeSection, setActiveSection] = useState("home");
+
+  useEffect(() => {
+    const handleScroll = () => {
+      const sections = navItems.map(item => document.getElementById(item.id));
+      const scrollPosition = window.scrollY + 200;
+
+      sections.forEach(section => {
+        if (section) {
+          const sectionTop = section.offsetTop;
+          const sectionHeight = section.offsetHeight;
+          if (scrollPosition >= sectionTop && scrollPosition < sectionTop + sectionHeight) {
+            setActiveSection(section.id);
+          }
+        }
+      });
+    };
+
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
+
+  const scrollToSection = (id: string) => {
+    const element = document.getElementById(id);
+    if (element) {
+      const offset = window.innerWidth < 768 ? 80 : 0;
+      window.scrollTo({
+        top: element.offsetTop - offset,
+        behavior: "smooth",
+      });
+    }
+  };
 
   return (
-    <nav className="sidebar">
-      {/* Top Logo */}
-      <div className="hidden md:flex flex-col items-center mt-4">
-        <div className="relative group cursor-pointer flex flex-col items-center">
-          <div className="relative">
-            <span className="text-[#fd2155] font-black text-5xl italic leading-none font-serif relative z-10 transition-all duration-300 group-hover:scale-110 shadow-neon">M</span>
-            <span className="absolute inset-0 text-[#00ffa3] font-black text-5xl italic leading-none translate-x-[2px] translate-y-[2px] opacity-40 group-hover:translate-x-0 group-hover:translate-y-0 transition-transform font-serif z-0 animate-pulse">M</span>
-          </div>
-          <span className="text-[0.65rem] text-white font-black tracking-[0.2rem] mt-2 group-hover:text-[#00ffa3] transition-colors duration-300">MAHAK</span>
-        </div>
-      </div>
+    <>
+      {/* Desktop Sidebar */}
+      <nav className="fixed left-0 top-0 h-screen w-20 hidden md:flex flex-col items-center justify-between py-10 bg-bg/50 backdrop-blur-md border-r border-white/5 z-[100]">
+        <div className="text-primary font-black text-2xl tracking-tighter">MA</div>
 
-      {/* Center Nav */}
-      <div className="flex flex-row md:flex-col gap-4 md:gap-8 w-full md:w-auto justify-evenly md:justify-center">
-        {navItems.map((item) => (
+        <div className="flex flex-col gap-8">
+          {navItems.map((item) => (
+            <a
+              key={item.id}
+              onClick={() => scrollToSection(item.id)}
+              className={`relative p-3 rounded-xl transition-all duration-300 cursor-pointer group ${
+                activeSection === item.id ? "text-primary bg-white/5" : "text-text-secondary hover:text-white"
+              }`}
+            >
+              <div className="text-xl group-hover:scale-125 transition-transform">{item.icon}</div>
+              
+              {/* Tooltip */}
+              <span className="absolute left-16 top-1/2 -translate-y-1/2 px-3 py-1 bg-primary text-bg text-[10px] font-bold rounded opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none whitespace-nowrap uppercase tracking-widest">
+                {item.label}
+              </span>
+
+              {/* Active Indicator Line */}
+              {activeSection === item.id && (
+                <motion.div
+                  layoutId="activeNav"
+                  className="absolute -left-[21px] top-1/2 -translate-y-1/2 w-[3px] h-6 bg-primary rounded-r-full shadow-[0_0_10px_#00ffa3]"
+                />
+              )}
+            </a>
+          ))}
+        </div>
+
+        <div className="flex flex-col gap-6 items-center">
+          <a 
+            href="https://github.com/mahakagarwal7" 
+            target="_blank" 
+            rel="noopener noreferrer"
+            className="text-text-secondary hover:text-primary transition-all hover:scale-125"
+          >
+            <FaGithub size={18} />
+          </a>
+          <a 
+            href="https://linkedin.com/in/mahakagarwal" 
+            target="_blank" 
+            rel="noopener noreferrer"
+            className="text-text-secondary hover:text-primary transition-all hover:scale-125"
+          >
+            <FaLinkedinIn size={18} />
+          </a>
+        </div>
+      </nav>
+
+      {/* Mobile Bottom Bar */}
+      <nav className="fixed bottom-0 left-0 right-0 h-16 md:hidden flex items-center justify-around bg-bg/80 backdrop-blur-lg border-t border-white/5 z-[100] px-4">
+        {navItems.slice(0, 5).map((item) => (
           <a
-            key={item.label}
-            href={item.href}
-            onClick={() => setActive(item.label)}
-            className={`group relative flex items-center justify-center p-2 transition-all duration-300 ${
-              active === item.label ? "text-[#00ffa3] drop-shadow-[0_0_10px_#00ffa3]" : "text-[#4d4d4e] hover:text-[#00ffa3]"
+            key={item.id}
+            onClick={() => scrollToSection(item.id)}
+            className={`relative p-2 transition-all duration-300 ${
+              activeSection === item.id ? "text-primary" : "text-text-secondary"
             }`}
           >
-            <div className={`transition-all duration-300 ${active === item.label ? "scale-125" : "group-hover:scale-110"}`}>
-              {item.icon}
-            </div>
-            {/* Tooltip */}
-            <span className="hidden md:block absolute left-16 px-4 py-2 bg-[#00ffa3] text-black text-xs font-black rounded-sm opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none uppercase tracking-tighter whitespace-nowrap z-50">
-              {item.label}
-            </span>
+            <div className="text-lg">{item.icon}</div>
+            {activeSection === item.id && (
+              <motion.div
+                layoutId="activeNavMobile"
+                className="absolute -bottom-2 left-1/2 -translate-x-1/2 w-1 h-1 bg-primary rounded-full shadow-[0_0_5px_#00ffa3]"
+              />
+            )}
           </a>
         ))}
-      </div>
-
-      {/* Bottom Socials */}
-      <div className="hidden md:flex flex-col gap-6 mb-6 items-center">
-        <a href="https://linkedin.com/in/mahakagarwal" target="_blank" className="text-[#4d4d4e] hover:text-[#00ffa3] transition-colors">
-          <FaLinkedinIn size={20} />
-        </a>
-        <a href="https://github.com/mahakagarwal7" target="_blank" className="text-[#4d4d4e] hover:text-[#00ffa3] transition-colors">
-          <FaGithub size={20} />
-        </a>
-      </div>
-    </nav>
+      </nav>
+    </>
   );
 }

@@ -1,186 +1,159 @@
 "use client";
 
-import { motion } from "framer-motion";
-import { PROJECTS } from "@/data/portfolio";
-import { useState } from "react";
+import { useState, useMemo } from "react";
+import { motion, AnimatePresence } from "framer-motion";
+import { FiFolder, FiExternalLink, FiGithub, FiStar, FiZap } from "react-icons/fi";
+import { PROJECTS, Project } from "@/data/portfolio";
+import { Container } from "./ui/Container";
+import { Card } from "./ui/Card";
+import { Button } from "./ui/Button";
+import ProjectModal from "./ui/ProjectModal";
+import TextReveal from "./TextReveal";
 
-const CATEGORIES = [
-  "All",
-  "Backend Development",
-  "Frontend Development",
-  "AI/ML",
-  "Scientific Computing",
-  "Desktop Application",
-  "Data Visualization",
-  "Blockchain Development",
-  "DevOps",
-  "Full Stack Development",
-];
+const CATEGORIES = ["All", "AI Research", "DevOps", "Full Stack", "EdTech", "Distributed Systems"];
 
 export default function Projects() {
-  const [filter, setFilter] = useState("All");
+  const [activeFilter, setActiveFilter] = useState("All");
+  const [selectedProject, setSelectedProject] = useState<Project | null>(null);
 
-  const filteredProjects = PROJECTS.filter((project) => {
-    if (filter === "All") return true;
-    // Check if any tag matches the category or if the category is part of the tags
-    return project.tags.some(tag => tag.toLowerCase().includes(filter.toLowerCase())) || 
-           (filter === "Scientific Computing" && project.name.includes("Model"));
-  });
+  const filteredProjects = useMemo(() => {
+    if (activeFilter === "All") return PROJECTS;
+    return PROJECTS.filter((project) => project.category === activeFilter);
+  }, [activeFilter]);
 
   return (
-    <section id="projects" className="relative min-h-screen py-20 px-8 md:px-12 lg:px-24 max-w-7xl mx-auto w-full">
-      {/* Decorative Music Tag */}
-      <div className="absolute top-10 right-10 flex flex-col items-end gap-1 opacity-60">
-        <span className="text-[#00ffa3] font-cursive text-sm">&lt;music&gt;</span>
-        <div className="flex gap-1 h-4 items-end">
-          {[0.4, 0.8, 0.5, 0.9, 0.6].map((h, i) => (
-            <motion.div 
-              key={i}
-              animate={{ height: [`${h*100}%`, `${(1-h)*100}%`, `${h*100}%`] }}
-              transition={{ repeat: Infinity, duration: 1, delay: i * 0.1 }}
-              className="w-[3px] bg-[#00ffa3] rounded-full"
-            />
-          ))}
-        </div>
-        <span className="text-[#00ffa3] font-cursive text-sm">&lt;/music&gt;</span>
-      </div>
+    <section id="projects" className="py-32 relative perspective-[2000px] overflow-hidden">
+      <Container>
+        <div className="mb-20 layer-content">
+          <h2 className="text-3xl md:text-5xl font-bold mb-4 tracking-tighter">
+            Startup <span className="text-primary italic"><TextReveal text="Portfolios" delay={0.3} /></span>
+          </h2>
+          <p className="text-text-secondary max-w-2xl">
+            Presenting my engineering work as a series of high-impact technical pitches, 
+            optimized for scalability and research fidelity.
+          </p>
 
-      <div className="z-10 relative">
-        <span className="tags h1-tag-top hidden md:block" style={{ top: '-1rem', left: '1rem' }}>&lt;h1&gt;</span>
-        <h1 className="mb-4 text-white">
-          Projects
-        </h1>
-        <span className="tags h1-tag-bottom hidden md:block" style={{ bottom: '-1rem', left: '1rem' }}>&lt;/h1&gt;</span>
-
-        <p className="mt-8 text-text-grey max-w-2xl text-lg leading-relaxed font-light">
-          A showcase of my technical projects spanning various domains, including backend development, 
-          data visualization, blockchain, and DevOps. Each project represents a solution to real-world challenges.
-        </p>
-
-        {/* Filter Chips - Two rows if needed */}
-        <div className="flex flex-wrap gap-3 mt-12 mb-20 max-w-4xl">
-          {CATEGORIES.map((cat) => (
-            <button
-              key={cat}
-              onClick={() => setFilter(cat)}
-              className={`px-6 py-2 rounded-full border text-[13px] font-bold tracking-tight transition-all duration-300 ${
-                filter === cat
-                  ? "bg-[#00ffa3] border-[#00ffa3] text-black shadow-[0_0_20px_rgba(0,255,163,0.5)]"
-                  : "border-[#00ffa3]/20 text-[#00ffa3] hover:bg-[#00ffa3]/10 hover:border-[#00ffa3]/40"
-              }`}
-            >
-              {cat}
-            </button>
-          ))}
+          {/* Filter Chips */}
+          <div className="flex flex-wrap gap-3 mt-10">
+            {CATEGORIES.map((cat) => (
+              <button
+                key={cat}
+                onClick={() => setActiveFilter(cat)}
+                className={`px-5 py-2 rounded-full text-[10px] font-bold tracking-[0.2em] uppercase transition-all duration-300 border ${
+                  activeFilter === cat
+                    ? "bg-primary border-primary text-bg"
+                    : "border-white/10 text-text-secondary hover:border-primary/50 hover:text-primary"
+                }`}
+              >
+                {cat}
+              </button>
+            ))}
+          </div>
         </div>
 
-        {/* Projects Grid with Horizontal Scroll Vibe or Responsive Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-8 lg:gap-12 mt-12 pr-4">
-          {filteredProjects.map((project, idx) => (
-            <motion.div
-              key={idx}
-              layout
-              initial={{ opacity: 0, x: 20 }}
-              whileInView={{ opacity: 1, x: 0 }}
-              viewport={{ once: true }}
-              className="bg-[#111111]/60 backdrop-blur-xl border border-[#00ffa3]/10 rounded-[2rem] p-10 hover:border-[#00ffa3]/40 transition-all duration-500 group relative flex flex-col h-full"
-            >
-              {/* Category & Year */}
-              <div className="flex justify-between items-center mb-8">
-                <div className="flex gap-3">
-                  <span className="bg-[#00ffa3]/5 text-[#00ffa3] px-4 py-1.5 rounded-full text-[11px] font-bold uppercase tracking-widest border border-[#00ffa3]/10">
-                    {project.tags[0] || "SYSTEMS"}
-                  </span>
-                  <span className="bg-orange-500/5 text-orange-400 px-4 py-1.5 rounded-full text-[11px] font-bold uppercase tracking-widest border border-orange-500/10">
-                    2024
-                  </span>
-                </div>
-                <div className="flex items-center gap-2">
-                   <span className="w-2 h-2 bg-[#00ffa3] rounded-full animate-pulse" />
-                   <span className="text-[#00ffa3] text-[11px] font-bold uppercase tracking-widest">
-                    COMPLETED
-                  </span>
-                </div>
-              </div>
-
-              {/* Title & Organization */}
-              <h3 className="text-3xl font-extrabold text-white mb-2 group-hover:text-[#00ffa3] transition-colors leading-tight">
-                {project.name}
-              </h3>
-              <p className="text-[#00ffa3]/80 text-sm font-bold mb-8 uppercase tracking-[0.2em]">
-                {project.name === "DiffuCat" ? "Independent Research" : "DRDO / Scaler Lab"}
-              </p>
-
-              {/* Description */}
-              <p className="text-text-grey text-[15px] mb-10 leading-relaxed font-light">
-                {project.description}
-              </p>
-
-              {/* Key Features */}
-              <div className="mb-10 flex-grow">
-                <h4 className="text-white font-bold text-[11px] uppercase tracking-[0.3em] mb-6">Key Features:</h4>
-                <ul className="space-y-4">
-                  {[
-                    "High-performance execution pipeline",
-                    "Real-time data synchronization",
-                    "Advanced mathematical modeling",
-                    "Scalable cloud architecture"
-                  ].map((feature, fidx) => (
-                    <li key={fidx} className="flex items-start gap-4 text-text-grey text-[14px]">
-                      <span className="mt-1.5 w-1.5 h-1.5 bg-[#00ffa3] rounded-full shadow-[0_0_8px_#00ffa3] flex-shrink-0" />
-                      <span className="leading-snug">{feature}</span>
-                    </li>
-                  ))}
-                </ul>
-              </div>
-
-              {/* Tech Stack Pills */}
-              <div className="flex flex-wrap gap-2.5 mb-10">
-                {project.tags.map((tag) => (
-                  <span key={tag} className="px-4 py-1.5 bg-[#1a1a1a] text-text-grey text-[11px] font-bold rounded-full border border-white/5 transition-colors hover:border-[#00ffa3]/30 hover:text-white">
-                    {tag}
-                  </span>
-                ))}
-              </div>
-
-              {/* Footer Repository Label */}
-              <div className="mt-auto pt-6 border-t border-[#222] flex items-center justify-between">
-                <div className="flex items-center gap-3 text-text-grey/40 text-[11px] font-bold uppercase tracking-widest">
-                  <span className="text-lg">/</span>
-                  <span>Private Project</span>
-                </div>
-                <a 
-                  href={project.link} 
-                  target="_blank"
-                  className="text-[#00ffa3] text-sm hover:scale-110 transition-transform"
+        {/* Projects Grid */}
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-10">
+          <AnimatePresence mode="popLayout">
+            {filteredProjects.map((project, idx) => (
+              <motion.div
+                key={project.id}
+                layout
+                initial={{ opacity: 0, y: 50 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, scale: 0.9 }}
+                transition={{ duration: 0.6, delay: idx * 0.1 }}
+                viewport={{ once: true }}
+                className="group h-full"
+              >
+                <Card 
+                  onClick={() => setSelectedProject(project)}
+                  className="h-full flex flex-col p-8 md:p-12 cursor-pointer bg-surface/30 backdrop-blur-xl border-white/5 hover:border-primary/30 transition-all duration-700 relative overflow-hidden group/card shadow-2xl"
                 >
-                  ↗
-                </a>
-              </div>
-            </motion.div>
-          ))}
+                  <div className="absolute top-0 right-0 w-64 h-64 bg-primary/5 rounded-full blur-[100px] opacity-0 group-hover/card:opacity-100 transition-opacity" />
+                  
+                  {/* Top Bar */}
+                  <div className="flex justify-between items-start mb-10 relative z-10">
+                    <div className="flex flex-col gap-1">
+                      <div className="flex items-center gap-3">
+                        <div className="p-3 bg-primary/10 rounded-2xl text-primary">
+                          <FiFolder size={24} />
+                        </div>
+                        {project.badge && (
+                          <span className="px-3 py-1 bg-primary/10 border border-primary/20 rounded-full text-[9px] font-bold text-primary uppercase tracking-[0.2em]">
+                            {project.badge}
+                          </span>
+                        )}
+                        {project.liveUrl && (
+                          <span className="flex items-center gap-1.5 px-3 py-1 bg-white/5 border border-white/10 rounded-full text-[9px] font-bold text-white uppercase tracking-[0.2em]">
+                            <span className="w-1 h-1 bg-green-500 rounded-full animate-pulse" /> Live Demo
+                          </span>
+                        )}
+                      </div>
+                    </div>
+                    <div className="flex gap-4 text-text-secondary opacity-0 group-hover/card:opacity-100 transition-all translate-y-2 group-hover/card:translate-y-0">
+                      <FiGithub size={24} className="hover:text-primary transition-colors" />
+                      <FiExternalLink size={24} className="hover:text-primary transition-colors" />
+                    </div>
+                  </div>
+
+                  {/* Content */}
+                  <div className="relative z-10 flex-grow">
+                    <h3 className="text-sm font-bold text-primary tracking-[0.4em] uppercase mb-4">{project.category}</h3>
+                    <h4 className="text-3xl md:text-4xl font-black text-white mb-6 tracking-tight leading-none group-hover/card:text-primary transition-colors">
+                      {project.name}
+                    </h4>
+                    
+                    <p className="text-lg font-bold text-white/90 mb-8 leading-tight italic">
+                      "{project.impact}"
+                    </p>
+
+                    <ul className="space-y-4 mb-12">
+                      {project.bullets?.map((bullet, i) => (
+                        <li key={i} className="flex items-start gap-3 text-sm text-text-secondary leading-relaxed group-hover/card:text-white/80 transition-colors">
+                          <span className="mt-1.5 w-1.5 h-1.5 bg-primary/40 rounded-full flex-shrink-0" />
+                          {bullet}
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+
+                  {/* Footer */}
+                  <div className="relative z-10 pt-10 border-t border-white/5 flex flex-wrap items-center justify-between gap-6">
+                    <div className="flex flex-wrap gap-2">
+                      {project.techStack.map(tag => (
+                        <span key={tag} className="text-[9px] font-bold text-white/40 uppercase tracking-widest bg-white/5 px-2 py-1 rounded-md border border-white/5 group-hover/card:border-primary/20 group-hover/card:text-primary/70 transition-all">
+                          {tag}
+                        </span>
+                      ))}
+                    </div>
+                    <div className="flex items-center gap-4 text-[10px] font-bold uppercase tracking-widest text-text-secondary">
+                      <div className="flex items-center gap-1.5">
+                        <FiStar className="text-yellow-500" /> {project.stars} Stars
+                      </div>
+                      <div className="flex items-center gap-1.5">
+                        <FiZap className="text-primary" /> pitch view
+                      </div>
+                    </div>
+                  </div>
+                </Card>
+              </motion.div>
+            ))}
+          </AnimatePresence>
         </div>
 
-        <div className="mt-32 text-center">
-          <a 
-            href="https://github.com/mahakagarwal7" 
-            target="_blank"
-            className="group relative inline-flex items-center gap-4 px-12 py-4 bg-[#00ffa3] text-black font-black text-sm uppercase tracking-[0.3em] rounded-full hover:scale-105 transition-all shadow-[0_0_30px_rgba(0,255,163,0.3)]"
+        <div className="mt-24 text-center">
+          <Button 
+            variant="outline" 
+            size="lg" 
+            className="gap-4 px-10 group border-white/10 hover:border-primary transition-all"
+            onClick={() => window.open('https://github.com/mahakagarwal7', '_blank')}
           >
-            See more on GitHub
-            <span className="text-xl group-hover:translate-x-2 transition-transform">▹</span>
-          </a>
+            <FiGithub className="text-xl" /> EXPLORE ARCHIVE PROTOCOLS
+          </Button>
         </div>
-      </div>
+      </Container>
 
-      {/* Vertical Progress Bar Decoration */}
-      <div className="absolute top-1/4 right-0 w-1.5 h-64 bg-white/5 rounded-full overflow-hidden hidden xl:block">
-        <motion.div 
-          className="w-full bg-[#00ffa3] shadow-[0_0_15px_#00ffa3]"
-          animate={{ height: ["20%", "80%", "20%"] }}
-          transition={{ repeat: Infinity, duration: 4, ease: "easeInOut" }}
-        />
-      </div>
+      <ProjectModal project={selectedProject} onClose={() => setSelectedProject(null)} />
     </section>
   );
 }

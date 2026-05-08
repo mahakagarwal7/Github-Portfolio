@@ -12,7 +12,7 @@ export default function LoadingScreen({ onComplete }: { onComplete: () => void }
       onComplete: () => {
         gsap.to(containerRef.current, {
           opacity: 0,
-          duration: 1,
+          duration: 0.8,
           ease: "power2.inOut",
           onComplete
         });
@@ -22,15 +22,15 @@ export default function LoadingScreen({ onComplete }: { onComplete: () => void }
     tl.to(textRef.current, {
       opacity: 1,
       y: 0,
-      duration: 1.5,
+      duration: 1,
       ease: "power4.out",
     })
-    .to(".pacman-dot", {
-      opacity: 1,
-      stagger: 0.2,
-      duration: 0.5
+    .to(".loading-bar", {
+      scaleX: 1,
+      duration: 1.5,
+      ease: "power2.inOut"
     })
-    .to(containerRef.current, { delay: 1 });
+    .to(containerRef.current, { delay: 0.5 });
 
     return () => { tl.kill(); };
   }, [onComplete]);
@@ -38,29 +38,27 @@ export default function LoadingScreen({ onComplete }: { onComplete: () => void }
   return (
     <div 
       ref={containerRef}
-      className="fixed inset-0 z-[1000] bg-[#1d1d1d] flex flex-col items-center justify-center"
+      className="fixed inset-0 z-[1000] bg-[#0a0a0a] flex flex-col items-center justify-center p-6"
     >
-      <div className="max-w-md w-full text-center">
-        <h2 
-          ref={textRef}
-          className="text-white text-5xl font-black mb-12 opacity-0 translate-y-8 tracking-tighter"
-        >
-          MAHAK<span className="text-[#00ffa3]">.OS</span>
-        </h2>
-        
-        {/* Simple CSS Pacman-style Loader */}
-        <div className="flex justify-center items-center gap-4">
-          <div className="w-8 h-8 border-4 border-[#00ffa3] border-r-transparent rounded-full animate-spin" />
-          <div className="flex gap-2">
-            {[1, 2, 3].map((i) => (
-              <div key={i} className="pacman-dot w-2 h-2 bg-[#00ffa3] rounded-full opacity-0" />
-            ))}
-          </div>
+      <div className="max-w-xs w-full">
+        <div className="overflow-hidden mb-4">
+          <h2 
+            ref={textRef}
+            className="text-white text-2xl font-bold opacity-0 translate-y-full tracking-tighter flex items-center gap-2"
+          >
+            MAHAK<span className="text-primary font-mono text-sm opacity-50">V2.0</span>
+          </h2>
         </div>
         
-        <p className="mt-8 text-[10px] text-white/30 font-mono tracking-[0.5em] uppercase">
-          Initializing Systems
-        </p>
+        {/* Modern Progress Bar */}
+        <div className="w-full h-[2px] bg-white/5 relative rounded-full overflow-hidden">
+          <div className="loading-bar absolute inset-0 bg-primary origin-left scale-x-0" />
+        </div>
+        
+        <div className="mt-4 flex justify-between items-center font-mono text-[10px] text-white/20 uppercase tracking-[0.2em]">
+          <span>Initializing Systems</span>
+          <span className="animate-pulse">Active</span>
+        </div>
       </div>
     </div>
   );
