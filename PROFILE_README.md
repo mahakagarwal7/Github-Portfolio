@@ -55,7 +55,7 @@ I build systems at the intersection of **Deep Learning** and **Infrastructure**.
 ---
 
 ### 📫 **Connect With Me**
-- **LinkedIn:** [linkedin.com/in/mahakagarwal](https://linkedin.com)
+- **LinkedIn:** [linkedin.com/in/mahak-agarwal-511b54376](https://www.linkedin.com/in/mahak-agarwal-511b54376)
 - **Portfolio:** [mahak.dev](https://localhost:3000) (In Development)
 - **Email:** [mahakagrwl07@gmail.com](mailto:mahakagrwl07@gmail.com)
 

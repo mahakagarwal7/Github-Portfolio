@@ -91,7 +91,7 @@ export default function Navigation() {
             <FaGithub size={18} />
           </a>
           <a 
-            href="https://linkedin.com/in/mahakagarwal" 
+            href="https://www.linkedin.com/in/mahak-agarwal-511b54376" 
             target="_blank" 
             rel="noopener noreferrer"
             className="text-text-secondary hover:text-primary transition-all hover:scale-125"

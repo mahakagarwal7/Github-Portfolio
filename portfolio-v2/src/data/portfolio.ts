@@ -35,7 +35,7 @@ export const GREETING = {
 
 export const SOCIAL_LINKS = {
   github: "https://github.com/mahakagarwal7",
-  linkedin: "https://linkedin.com/in/mahakagarwal",
+  linkedin: "https://www.linkedin.com/in/mahak-agarwal-511b54376",
   email: "mahakagrwl07@gmail.com",
   phone: "+91 9006518958"
 };
