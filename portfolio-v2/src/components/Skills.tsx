@@ -5,15 +5,15 @@ import { useRef } from "react";
 import Image from "next/image";
 import { SKILLS } from "@/data/portfolio";
 import { Container } from "./ui/Container";
-import { 
-  SiPython, SiTypescript, SiJavascript, SiCplusplus, SiPostgresql, 
-  SiSupabase, SiDocker, SiGithub, SiGit, SiReact, SiNextdotjs, 
-  SiFastapi, SiNodedotjs, SiPytorch, SiTensorflow, SiMongodb, 
+import {
+  SiPython, SiTypescript, SiJavascript, SiCplusplus, SiPostgresql,
+  SiSupabase, SiDocker, SiGithub, SiGit, SiReact, SiNextdotjs,
+  SiFastapi, SiNodedotjs, SiPytorch, SiTensorflow, SiMongodb,
   SiRedis, SiVite, SiTailwindcss, SiFirebase, SiLinux, SiDatadog,
   SiVercel, SiNetlify, SiCloudinary, SiSlack
 } from "react-icons/si";
-import { 
-  FiCode, FiCpu, FiServer, FiLayout, FiDatabase, FiSettings, FiTerminal, FiBox 
+import {
+  FiCode, FiCpu, FiServer, FiLayout, FiDatabase, FiSettings, FiTerminal, FiBox
 } from "react-icons/fi";
 
 const CATEGORY_ICON_MAP: Record<string, any> = {
@@ -93,9 +93,9 @@ export default function Skills() {
           <div className="relative max-w-6xl mx-auto px-4 sm:px-10">
             {/* Central Vertical Line */}
             <div className="absolute left-1/2 -translate-x-1/2 top-0 bottom-0 w-[2px] bg-white/5 hidden md:block">
-              <motion.div 
+              <motion.div
                 style={{ height: lineHeight }}
-                className="w-full bg-gradient-to-b from-primary via-primary to-transparent shadow-[0_0_20px_rgba(0,255,163,0.5)]" 
+                className="w-full bg-gradient-to-b from-primary via-primary to-transparent shadow-[0_0_20px_rgba(0,255,163,0.5)]"
               />
             </div>
 
@@ -119,8 +119,8 @@ export default function Skills() {
                         <div className="h-full bg-surface/90 backdrop-blur-3xl rounded-[2.4rem] border border-white/5 overflow-hidden">
                           {/* Category Image Header */}
                           <div className="h-40 relative overflow-hidden">
-                            <Image 
-                              src={CATEGORY_IMAGE_MAP[category.category] || "/skills/default.png"} 
+                            <Image
+                              src={CATEGORY_IMAGE_MAP[category.category] || "/skills/default.png"}
                               alt={category.category}
                               fill
                               className="object-cover opacity-60 group-hover:opacity-100 group-hover:scale-110 transition-all duration-1000"
@@ -144,9 +144,9 @@ export default function Skills() {
                                 return (
                                   <div 
                                     key={skill}
-                                    className="flex items-center gap-2 px-3 py-1.5 bg-white/5 border border-white/5 rounded-lg text-[10px] font-bold text-white/50 uppercase tracking-wider hover:text-primary hover:border-primary/30 transition-all cursor-default"
+                                    className="flex items-center gap-2.5 px-4 py-2 bg-white/5 border border-white/10 rounded-xl text-[11px] font-black text-white uppercase tracking-widest hover:text-bg hover:bg-primary hover:border-primary transition-all duration-300 cursor-default group/skill shadow-lg"
                                   >
-                                    {SkillIcon && <SkillIcon className="text-xs" />}
+                                    {SkillIcon && <SkillIcon className="text-sm text-primary group-hover/skill:text-bg group-hover/skill:scale-110 transition-all" />}
                                     {skill}
                                   </div>
                                 );
@@ -159,11 +159,11 @@ export default function Skills() {
 
                     {/* Central Indicator Dot */}
                     <div className="relative z-10 hidden md:block">
-                      <motion.div 
+                      <motion.div
                         initial={{ scale: 0 }}
                         whileInView={{ scale: 1 }}
                         viewport={{ once: true }}
-                        className="w-6 h-6 rounded-full bg-bg border-4 border-primary shadow-[0_0_20px_rgba(0,255,163,0.5)]" 
+                        className="w-6 h-6 rounded-full bg-bg border-4 border-primary shadow-[0_0_20px_rgba(0,255,163,0.5)]"
                       />
                     </div>
 

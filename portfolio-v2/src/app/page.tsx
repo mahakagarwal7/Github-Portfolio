@@ -7,6 +7,7 @@ import { useScroll, useSpring, motion, AnimatePresence } from "framer-motion";
 
 // Lazy load non-critical sections
 const Projects = lazy(() => import("@/components/Projects"));
+const Research = lazy(() => import("@/components/Research"));
 const Education = lazy(() => import("@/components/Education"));
 const Achievements = lazy(() => import("@/components/Achievements"));
 const Skills = lazy(() => import("@/components/Skills"));
@@ -47,6 +48,11 @@ export default function Home() {
       
       <Suspense fallback={<SectionSkeleton />}>
         <Projects />
+      </Suspense>
+
+      <Suspense fallback={<SectionSkeleton />}>
+        <SectionDivider />
+        <Research />
       </Suspense>
 
       <Suspense fallback={<SectionSkeleton />}>

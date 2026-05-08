@@ -9,7 +9,15 @@ import { FiArrowRight, FiFileText } from "react-icons/fi";
 
 export default function Hero() {
   return (
-    <section id="home" className="relative min-h-screen flex items-center pt-20 pb-32 overflow-hidden">
+    <section id="home" className="relative min-h-screen flex items-center pt-20 pb-32 overflow-hidden bg-bg">
+      {/* Cinematic Grid Floor */}
+      <div className="absolute inset-0 pointer-events-none">
+        <div className="absolute inset-0 bg-[linear-gradient(to_right,#ffffff05_1px,transparent_1px),linear-gradient(to_bottom,#ffffff05_1px,transparent_1px)] bg-[size:40px_40px] [mask-image:radial-gradient(ellipse_60%_50%_at_50%_50%,#000_70%,transparent_100%)]" />
+        <div 
+          className="absolute bottom-0 left-0 right-0 h-[50vh] bg-[linear-gradient(to_right,#00ffa30a_1px,transparent_1px),linear-gradient(to_bottom,#00ffa30a_1px,transparent_1px)] bg-[size:60px_60px] [transform:perspective(1000px)_rotateX(60deg)_translateY(50px)_scale(2)] [mask-image:linear-gradient(to_top,black,transparent)] animate-[grid-scroll_20s_linear_infinite]" 
+        />
+      </div>
+
       <Container>
         <div className="flex flex-col items-center text-center max-w-4xl mx-auto space-y-12">
           

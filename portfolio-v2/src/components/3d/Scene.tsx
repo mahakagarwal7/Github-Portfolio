@@ -4,6 +4,7 @@ import { Canvas } from "@react-three/fiber";
 import { Suspense } from "react";
 import HeroShapes from "./HeroShapes";
 import ScrollParticles from "./ScrollParticles";
+import NeuralNetwork3D from "./NeuralNetwork3D";
 import DepthGrid from "./DepthGrid";
 import FloatingSkillIcons from "./FloatingSkillIcons";
 import { useDeviceType } from "@/hooks/useDeviceType";
@@ -27,6 +28,7 @@ export default function Scene() {
           <spotLight position={[-10, 10, 10]} angle={0.15} penumbra={1} intensity={1} color="#fd2155" />
           
           <ScrollParticles />
+          <NeuralNetwork3D />
           
           {/* Post-processing could go here if needed */}
         </Suspense>

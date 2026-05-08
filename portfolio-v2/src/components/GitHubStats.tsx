@@ -84,26 +84,52 @@ export default function GitHubStats() {
             </div>
           </div>
 
-          {/* Activity / Link */}
-          <div className="flex flex-col justify-center items-center p-12 bg-surface/30 border border-white/5 rounded-[40px] text-center space-y-8">
-            <div className="p-8 bg-primary/10 rounded-full">
-              <FiActivity size={64} className="text-primary animate-pulse" />
+          {/* Profile Hero Card */}
+          <motion.div 
+            initial={{ opacity: 0, scale: 0.9 }}
+            whileInView={{ opacity: 1, scale: 1 }}
+            className="relative flex flex-col justify-end p-12 bg-surface/30 border border-white/5 rounded-[3rem] overflow-hidden group min-h-[500px]"
+          >
+            {/* Background Image */}
+            <div className="absolute inset-0 z-0">
+              <img 
+                src="/images/open_source.png" 
+                alt="Open Source Protocol"
+                className="w-full h-full object-cover opacity-40 group-hover:opacity-60 group-hover:scale-110 transition-all duration-1000 grayscale-[0.3] group-hover:grayscale-0"
+              />
+              <div className="absolute inset-0 bg-gradient-to-t from-bg via-bg/40 to-transparent" />
             </div>
-            <div className="space-y-4">
-              <h3 className="text-3xl font-black text-white uppercase tracking-tighter">mahakagarwal7</h3>
-              <p className="text-sm text-text-secondary max-w-xs mx-auto">
-                Explore the full development history, commit logs, and research artifacts on GitHub.
-              </p>
+
+            <div className="relative z-10 space-y-8">
+              <div className="space-y-4">
+                <div className="inline-flex items-center gap-3 px-4 py-2 bg-primary/10 border border-primary/20 rounded-xl">
+                  <div className="w-2 h-2 bg-primary rounded-full animate-ping" />
+                  <span className="text-[10px] font-black text-primary uppercase tracking-[0.2em]">Live Connection</span>
+                </div>
+                <h3 className="text-4xl md:text-5xl font-black text-white uppercase tracking-tighter leading-none">
+                  mahak<span className="text-primary italic">agarwal7</span>
+                </h3>
+                <p className="text-sm text-text-secondary max-w-sm leading-relaxed uppercase font-bold tracking-wider">
+                  Explore the full development history, commit logs, and research artifacts on the global open-source grid.
+                </p>
+              </div>
+
+              <a 
+                href="https://github.com/mahakagarwal7"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex px-10 py-5 bg-primary text-bg font-black uppercase text-xs tracking-[0.3em] rounded-2xl hover:bg-white transition-all hover:gap-8 group/btn items-center gap-6"
+              >
+                Go to Profile <FiGithub size={20} className="group-hover/btn:rotate-12 transition-transform" />
+              </a>
             </div>
-            <a 
-              href="https://github.com/mahakagarwal7"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="px-10 py-4 bg-primary text-bg font-black uppercase text-xs tracking-[0.2em] rounded-full hover:scale-105 transition-transform"
-            >
-              Go to Profile
-            </a>
-          </div>
+
+            {/* Decorative Corner Stats */}
+            <div className="absolute top-10 right-10 flex flex-col items-end opacity-20">
+              <span className="text-[10px] font-black text-white uppercase tracking-[0.5em]">Network.Status</span>
+              <span className="text-2xl font-black text-primary italic uppercase tracking-tighter">Encrypted</span>
+            </div>
+          </motion.div>
         </div>
       </Container>
     </section>

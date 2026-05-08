@@ -30,13 +30,31 @@ export default function Contact() {
       <Container>
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-20">
           
-          {/* Left: Info */}
+          {/* Left: Info & Hero */}
           <div className="space-y-12">
-            <div className="space-y-4">
-              <h2 className="text-3xl md:text-5xl font-black text-white uppercase tracking-tighter">
+            <div className="space-y-6">
+              <h2 className="text-4xl md:text-6xl font-black text-white uppercase tracking-tighter">
                 Initiate <span className="text-primary italic">Contact</span>
               </h2>
-              <p className="text-text-secondary max-w-xl">
+              
+              {/* Cinematic Contact Hero */}
+              <motion.div 
+                initial={{ opacity: 0, scale: 0.95 }}
+                whileInView={{ opacity: 1, scale: 1 }}
+                className="relative h-64 md:h-80 rounded-[2.5rem] overflow-hidden border border-white/5 shadow-2xl group"
+              >
+                <img 
+                  src="/images/contact.png" 
+                  alt="AI Communication Hub"
+                  className="w-full h-full object-cover opacity-60 group-hover:opacity-100 group-hover:scale-110 transition-all duration-1000"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-bg via-transparent to-transparent" />
+                <div className="absolute top-6 right-6 px-4 py-2 bg-black/50 backdrop-blur-md border border-white/10 rounded-xl">
+                  <span className="text-[10px] font-black text-primary uppercase tracking-[0.3em]">Protocol active</span>
+                </div>
+              </motion.div>
+
+              <p className="text-lg text-text-secondary max-w-xl leading-relaxed uppercase font-bold tracking-wider">
                 Ready for collaborations in AI systems, research engineering, and scalable infrastructure.
               </p>
             </div>
@@ -44,16 +62,17 @@ export default function Contact() {
             <div className="space-y-6">
               <button 
                 onClick={copyEmail}
-                className="flex items-center gap-6 p-6 bg-surface border border-white/5 hover:border-primary/30 rounded-3xl transition-all group w-full text-left"
+                className="flex items-center gap-6 p-6 bg-surface border border-white/5 hover:border-primary/30 rounded-3xl transition-all group w-full text-left relative overflow-hidden"
               >
-                <div className="p-4 bg-primary/10 rounded-2xl text-primary">
+                <div className="absolute inset-0 bg-primary/5 opacity-0 group-hover:opacity-100 transition-opacity" />
+                <div className="p-4 bg-primary/10 rounded-2xl text-primary relative z-10 group-hover:bg-primary group-hover:text-bg transition-all">
                   <FiMail size={24} />
                 </div>
-                <div className="flex-1">
+                <div className="flex-1 relative z-10">
                   <div className="text-[10px] font-black text-white/40 uppercase tracking-widest mb-1">Email Protocol</div>
                   <div className="text-lg font-bold text-white group-hover:text-primary transition-colors">{SOCIAL_LINKS.email}</div>
                 </div>
-                <FiCopy className={`transition-opacity ${copied ? 'opacity-100' : 'opacity-20'}`} />
+                <FiCopy className={`transition-all relative z-10 ${copied ? 'opacity-100 scale-125 text-primary' : 'opacity-20'}`} />
               </button>
 
               <div className="grid grid-cols-2 gap-4">
@@ -61,19 +80,21 @@ export default function Contact() {
                   href={SOCIAL_LINKS.linkedin}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="flex flex-col gap-4 p-6 bg-surface border border-white/5 hover:border-primary/30 rounded-3xl transition-all group"
+                  className="flex flex-col gap-4 p-8 bg-surface border border-white/5 hover:border-primary/30 rounded-3xl transition-all group relative overflow-hidden"
                 >
-                  <FiLinkedin size={24} className="text-primary" />
-                  <div className="text-[10px] font-black text-white/40 uppercase tracking-widest">LinkedIn</div>
+                  <div className="absolute inset-0 bg-primary/5 opacity-0 group-hover:opacity-100 transition-opacity" />
+                  <FiLinkedin size={24} className="text-primary relative z-10 group-hover:scale-125 transition-transform" />
+                  <div className="text-[10px] font-black text-white/40 uppercase tracking-widest relative z-10">LinkedIn</div>
                 </a>
                 <a 
                   href={SOCIAL_LINKS.github}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="flex flex-col gap-4 p-6 bg-surface border border-white/5 hover:border-primary/30 rounded-3xl transition-all group"
+                  className="flex flex-col gap-4 p-8 bg-surface border border-white/5 hover:border-primary/30 rounded-3xl transition-all group relative overflow-hidden"
                 >
-                  <FiGithub size={24} className="text-primary" />
-                  <div className="text-[10px] font-black text-white/40 uppercase tracking-widest">GitHub</div>
+                  <div className="absolute inset-0 bg-primary/5 opacity-0 group-hover:opacity-100 transition-opacity" />
+                  <FiGithub size={24} className="text-primary relative z-10 group-hover:scale-125 transition-transform" />
+                  <div className="text-[10px] font-black text-white/40 uppercase tracking-widest relative z-10">GitHub</div>
                 </a>
               </div>
             </div>
