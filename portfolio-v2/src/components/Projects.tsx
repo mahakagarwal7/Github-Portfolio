@@ -28,7 +28,7 @@ export default function Projects() {
   });
 
   return (
-    <section id="projects" className="py-48 relative min-h-screen">
+    <section id="projects" className="relative min-h-screen py-20 px-8 md:px-12 lg:px-24 max-w-7xl mx-auto w-full">
       {/* Decorative Music Tag */}
       <div className="absolute top-10 right-10 flex flex-col items-end gap-1 opacity-60">
         <span className="text-[#00ffa3] font-cursive text-sm">&lt;music&gt;</span>
@@ -45,12 +45,12 @@ export default function Projects() {
         <span className="text-[#00ffa3] font-cursive text-sm">&lt;/music&gt;</span>
       </div>
 
-      <div className="z-10">
-        <span className="section-tag">&lt;h1&gt;</span>
-        <h1 className="text-[#00ffa3] drop-shadow-[0_0_15px_rgba(0,255,163,0.4)] mb-4">
+      <div className="z-10 relative">
+        <span className="tags h1-tag-top hidden md:block" style={{ top: '-1rem', left: '1rem' }}>&lt;h1&gt;</span>
+        <h1 className="mb-4 text-white">
           Projects
         </h1>
-        <span className="section-tag">&lt;/h1&gt;</span>
+        <span className="tags h1-tag-bottom hidden md:block" style={{ bottom: '-1rem', left: '1rem' }}>&lt;/h1&gt;</span>
 
         <p className="mt-8 text-text-grey max-w-2xl text-lg leading-relaxed font-light">
           A showcase of my technical projects spanning various domains, including backend development, 

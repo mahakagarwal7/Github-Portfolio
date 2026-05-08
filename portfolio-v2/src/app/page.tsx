@@ -15,17 +15,14 @@ export default function Home() {
   const [loading, setLoading] = useState(true);
 
   return (
-    <main className="relative">
+    <>
       {loading && <LoadingScreen onComplete={() => setLoading(false)} />}
       
       {!loading && (
-        <>
+        <div className="relative w-full">
           <Scene />
-          <Navigation />
           
-          <div id="home">
-            <Hero />
-          </div>
+          <Hero />
           
           <About />
           
@@ -37,13 +34,13 @@ export default function Home() {
           
           <Contact />
 
-          <footer className="py-10 text-center border-t border-white/5 bg-black">
-            <p className="text-gray-500 text-sm font-space tracking-widest uppercase">
+          <footer className="py-10 text-center border-t border-white/5 bg-[#020617]">
+            <p className="text-gray-500 text-xs tracking-[0.2em] font-light uppercase">
               &copy; {new Date().getFullYear()} Mahak Agarwal. Engineered for Excellence.
             </p>
           </footer>
-        </>
+        </div>
       )}
-    </main>
+    </>
   );
 }
