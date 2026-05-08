@@ -2,7 +2,6 @@
 
 import { Canvas } from "@react-three/fiber";
 import { Suspense } from "react";
-import HeroShapes from "./HeroShapes";
 import ScrollParticles from "./ScrollParticles";
 import NeuralNetwork3D from "./NeuralNetwork3D";
 import DepthGrid from "./DepthGrid";

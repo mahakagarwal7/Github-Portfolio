@@ -36,10 +36,10 @@ export default function Research() {
       </div>
 
       <Container>
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-16 items-center">
+        <div className="flex flex-col lg:grid lg:grid-cols-12 gap-12 lg:gap-32 items-start">
           
           {/* Left Side: Narrative */}
-          <div className="lg:col-span-5 space-y-12">
+          <div className="lg:col-span-4 space-y-12">
             <div className="space-y-6">
               <motion.div
                 initial={{ opacity: 0, y: 10 }}
@@ -49,7 +49,7 @@ export default function Research() {
                 <FiSearch className="text-primary" />
                 <span className="text-[10px] font-black text-primary uppercase tracking-[0.2em]">Research Frontier</span>
               </motion.div>
-              <h2 className="text-5xl md:text-7xl font-black text-white uppercase tracking-tighter leading-none">
+              <h2 className="text-4xl md:text-6xl lg:text-[5.5rem] font-black text-white uppercase tracking-tighter leading-[0.85] relative z-10 overflow-visible pr-8">
                 Applied <span className="text-primary italic">Intelligence</span>
               </h2>
               
@@ -91,7 +91,7 @@ export default function Research() {
           </div>
 
           {/* Right Side: Focus Areas (Bento-like cards) */}
-          <div className="lg:col-span-7 grid grid-cols-1 sm:grid-cols-2 gap-6">
+          <div className="lg:col-span-8 grid grid-cols-1 sm:grid-cols-2 gap-6 lg:mt-24">
             {RESEARCH_AREAS.map((area, idx) => (
               <motion.div
                 key={area.title}
@@ -99,7 +99,7 @@ export default function Research() {
                 whileInView={{ opacity: 1, y: 0 }}
                 transition={{ delay: idx * 0.1 }}
                 className={`p-8 bg-surface/50 backdrop-blur-3xl border border-white/5 rounded-[2.5rem] group hover:border-primary/40 transition-all ${
-                  idx === 0 ? "sm:col-span-2" : ""
+                  idx === 0 ? "md:col-start-2" : ""
                 }`}
               >
                 <div className="flex flex-col h-full justify-between gap-8">
