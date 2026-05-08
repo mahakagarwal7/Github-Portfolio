@@ -1,159 +1,128 @@
 "use client";
 
-import { useState, useMemo } from "react";
-import { motion, AnimatePresence } from "framer-motion";
-import { FiFolder, FiExternalLink, FiGithub, FiStar, FiZap } from "react-icons/fi";
-import { PROJECTS, Project } from "@/data/portfolio";
+import { motion, Variants } from "framer-motion";
+import Image from "next/image";
+import { PROJECTS } from "@/data/portfolio";
 import { Container } from "./ui/Container";
-import { Card } from "./ui/Card";
-import { Button } from "./ui/Button";
-import ProjectModal from "./ui/ProjectModal";
-import TextReveal from "./TextReveal";
-
-const CATEGORIES = ["All", "AI Research", "DevOps", "Full Stack", "EdTech", "Distributed Systems"];
+import { FiGithub, FiArrowUpRight } from "react-icons/fi";
+import TiltCard from "./3d/TiltCard";
 
 export default function Projects() {
-  const [activeFilter, setActiveFilter] = useState("All");
-  const [selectedProject, setSelectedProject] = useState<Project | null>(null);
+  const containerVariants: Variants = {
+    hidden: { opacity: 0 },
+    visible: {
+      opacity: 1,
+      transition: {
+        staggerChildren: 0.2
+      }
+    }
+  };
 
-  const filteredProjects = useMemo(() => {
-    if (activeFilter === "All") return PROJECTS;
-    return PROJECTS.filter((project) => project.category === activeFilter);
-  }, [activeFilter]);
+  const itemVariants: Variants = {
+    hidden: { opacity: 0, y: 30 },
+    visible: { 
+      opacity: 1, 
+      y: 0,
+      transition: { duration: 0.8, ease: "easeOut" }
+    }
+  };
 
   return (
-    <section id="projects" className="py-32 relative perspective-[2000px] overflow-hidden">
+    <section id="projects" className="py-32 relative overflow-hidden bg-bg/50">
       <Container>
-        <div className="mb-20 layer-content">
-          <h2 className="text-3xl md:text-5xl font-bold mb-4 tracking-tighter">
-            Startup <span className="text-primary italic"><TextReveal text="Portfolios" delay={0.3} /></span>
-          </h2>
-          <p className="text-text-secondary max-w-2xl">
-            Presenting my engineering work as a series of high-impact technical pitches, 
-            optimized for scalability and research fidelity.
-          </p>
+        <motion.div 
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true, amount: 0.1 }}
+          variants={containerVariants}
+          className="space-y-24"
+        >
+          {/* Header */}
+          <motion.div variants={itemVariants} className="space-y-6 text-center max-w-3xl mx-auto">
+            <h2 className="text-4xl md:text-6xl font-black text-white uppercase tracking-tighter">
+              Featured <span className="text-primary italic">Projects</span>
+            </h2>
+            <div className="h-1 w-24 bg-primary mx-auto rounded-full" />
+            <p className="text-text-secondary text-lg">
+              Architecting production-grade AI systems and scalable distributed architectures.
+            </p>
+          </motion.div>
 
-          {/* Filter Chips */}
-          <div className="flex flex-wrap gap-3 mt-10">
-            {CATEGORIES.map((cat) => (
-              <button
-                key={cat}
-                onClick={() => setActiveFilter(cat)}
-                className={`px-5 py-2 rounded-full text-[10px] font-bold tracking-[0.2em] uppercase transition-all duration-300 border ${
-                  activeFilter === cat
-                    ? "bg-primary border-primary text-bg"
-                    : "border-white/10 text-text-secondary hover:border-primary/50 hover:text-primary"
-                }`}
-              >
-                {cat}
-              </button>
-            ))}
-          </div>
-        </div>
-
-        {/* Projects Grid */}
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-10">
-          <AnimatePresence mode="popLayout">
-            {filteredProjects.map((project, idx) => (
-              <motion.div
-                key={project.id}
-                layout
-                initial={{ opacity: 0, y: 50 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, scale: 0.9 }}
-                transition={{ duration: 0.6, delay: idx * 0.1 }}
-                viewport={{ once: true }}
-                className="group h-full"
-              >
-                <Card 
-                  onClick={() => setSelectedProject(project)}
-                  className="h-full flex flex-col p-8 md:p-12 cursor-pointer bg-surface/30 backdrop-blur-xl border-white/5 hover:border-primary/30 transition-all duration-700 relative overflow-hidden group/card shadow-2xl"
-                >
-                  <div className="absolute top-0 right-0 w-64 h-64 bg-primary/5 rounded-full blur-[100px] opacity-0 group-hover/card:opacity-100 transition-opacity" />
-                  
-                  {/* Top Bar */}
-                  <div className="flex justify-between items-start mb-10 relative z-10">
-                    <div className="flex flex-col gap-1">
-                      <div className="flex items-center gap-3">
-                        <div className="p-3 bg-primary/10 rounded-2xl text-primary">
-                          <FiFolder size={24} />
-                        </div>
-                        {project.badge && (
-                          <span className="px-3 py-1 bg-primary/10 border border-primary/20 rounded-full text-[9px] font-bold text-primary uppercase tracking-[0.2em]">
-                            {project.badge}
-                          </span>
-                        )}
-                        {project.liveUrl && (
-                          <span className="flex items-center gap-1.5 px-3 py-1 bg-white/5 border border-white/10 rounded-full text-[9px] font-bold text-white uppercase tracking-[0.2em]">
-                            <span className="w-1 h-1 bg-green-500 rounded-full animate-pulse" /> Live Demo
-                          </span>
-                        )}
-                      </div>
-                    </div>
-                    <div className="flex gap-4 text-text-secondary opacity-0 group-hover/card:opacity-100 transition-all translate-y-2 group-hover/card:translate-y-0">
-                      <FiGithub size={24} className="hover:text-primary transition-colors" />
-                      <FiExternalLink size={24} className="hover:text-primary transition-colors" />
-                    </div>
-                  </div>
-
-                  {/* Content */}
-                  <div className="relative z-10 flex-grow">
-                    <h3 className="text-sm font-bold text-primary tracking-[0.4em] uppercase mb-4">{project.category}</h3>
-                    <h4 className="text-3xl md:text-4xl font-black text-white mb-6 tracking-tight leading-none group-hover/card:text-primary transition-colors">
-                      {project.name}
-                    </h4>
+          {/* Projects Grid */}
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10">
+            {PROJECTS.map((project, idx) => (
+              <motion.div key={project.id} variants={itemVariants}>
+                <TiltCard>
+                  <div className="h-full bg-surface/40 backdrop-blur-xl border border-white/10 rounded-[2.5rem] overflow-hidden group hover:border-primary/50 transition-all duration-700 shadow-2xl relative">
+                    {/* Background Glow */}
+                    <div className="absolute -inset-1 bg-gradient-to-r from-primary/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity blur-2xl" />
                     
-                    <p className="text-lg font-bold text-white/90 mb-8 leading-tight italic">
-                      "{project.impact}"
-                    </p>
-
-                    <ul className="space-y-4 mb-12">
-                      {project.bullets?.map((bullet, i) => (
-                        <li key={i} className="flex items-start gap-3 text-sm text-text-secondary leading-relaxed group-hover/card:text-white/80 transition-colors">
-                          <span className="mt-1.5 w-1.5 h-1.5 bg-primary/40 rounded-full flex-shrink-0" />
-                          {bullet}
-                        </li>
-                      ))}
-                    </ul>
-                  </div>
-
-                  {/* Footer */}
-                  <div className="relative z-10 pt-10 border-t border-white/5 flex flex-wrap items-center justify-between gap-6">
-                    <div className="flex flex-wrap gap-2">
-                      {project.techStack.map(tag => (
-                        <span key={tag} className="text-[9px] font-bold text-white/40 uppercase tracking-widest bg-white/5 px-2 py-1 rounded-md border border-white/5 group-hover/card:border-primary/20 group-hover/card:text-primary/70 transition-all">
-                          {tag}
+                    {/* Project Image */}
+                    <div className="h-64 relative overflow-hidden">
+                      <Image 
+                        src={project.image} 
+                        alt={project.name}
+                        fill
+                        className="object-cover transform group-hover:scale-110 transition-transform duration-1000 grayscale-[0.5] group-hover:grayscale-0"
+                      />
+                      <div className="absolute inset-0 bg-gradient-to-t from-surface via-transparent to-transparent opacity-90" />
+                      
+                      {/* Floating Badge */}
+                      <div className="absolute top-6 left-6 px-4 py-2 bg-black/80 backdrop-blur-md border border-white/10 rounded-xl">
+                        <span className="text-[10px] font-black text-primary uppercase tracking-[0.3em]">
+                          Protocol {idx + 1}
                         </span>
-                      ))}
-                    </div>
-                    <div className="flex items-center gap-4 text-[10px] font-bold uppercase tracking-widest text-text-secondary">
-                      <div className="flex items-center gap-1.5">
-                        <FiStar className="text-yellow-500" /> {project.stars} Stars
                       </div>
-                      <div className="flex items-center gap-1.5">
-                        <FiZap className="text-primary" /> pitch view
+                    </div>
+
+                    <div className="p-8 space-y-8 relative">
+                      <div className="space-y-4">
+                        <div className="flex items-center justify-between">
+                          <h3 className="text-2xl font-black text-white uppercase tracking-tight group-hover:text-primary transition-colors">
+                            {project.name}
+                          </h3>
+                          <FiArrowUpRight className="text-white/20 group-hover:text-primary group-hover:translate-x-1 group-hover:-translate-y-1 transition-all" />
+                        </div>
+                        <p className="text-sm text-white/50 leading-relaxed line-clamp-3 group-hover:text-white/80 transition-colors">
+                          {project.description}
+                        </p>
+                      </div>
+
+                      {/* Tech Stack */}
+                      <div className="flex flex-wrap gap-2">
+                        {project.techStack.slice(0, 4).map(tech => (
+                          <span 
+                            key={tech}
+                            className="px-3 py-1.5 bg-white/5 border border-white/5 rounded-lg text-[9px] font-bold text-white/40 uppercase tracking-widest hover:text-primary hover:border-primary/30 transition-all cursor-default"
+                          >
+                            {tech}
+                          </span>
+                        ))}
+                        {project.techStack.length > 4 && (
+                          <span className="px-3 py-1.5 text-[9px] font-bold text-white/20 uppercase tracking-widest">
+                            +{project.techStack.length - 4} More
+                          </span>
+                        )}
+                      </div>
+
+                      <div className="pt-4 border-t border-white/5">
+                        <a 
+                          href={project.githubUrl}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="inline-flex items-center gap-3 text-[11px] font-black text-primary uppercase tracking-[0.3em] hover:gap-5 transition-all group/link"
+                        >
+                          Source Code <FiGithub className="text-lg group-hover/link:rotate-12 transition-transform" />
+                        </a>
                       </div>
                     </div>
                   </div>
-                </Card>
+                </TiltCard>
               </motion.div>
             ))}
-          </AnimatePresence>
-        </div>
-
-        <div className="mt-24 text-center">
-          <Button 
-            variant="outline" 
-            size="lg" 
-            className="gap-4 px-10 group border-white/10 hover:border-primary transition-all"
-            onClick={() => window.open('https://github.com/mahakagarwal7', '_blank')}
-          >
-            <FiGithub className="text-xl" /> EXPLORE ARCHIVE PROTOCOLS
-          </Button>
-        </div>
+          </div>
+        </motion.div>
       </Container>
-
-      <ProjectModal project={selectedProject} onClose={() => setSelectedProject(null)} />
     </section>
   );
 }

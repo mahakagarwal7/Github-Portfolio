@@ -1,146 +1,109 @@
 "use client";
 
-import React, { useEffect, useState } from "react";
 import { motion } from "framer-motion";
-import { FiGithub, FiStar, FiGitBranch, FiUsers, FiActivity } from "react-icons/fi";
-import { fetchGitHubStats, GitHubData } from "@/lib/github";
+import { useEffect, useState } from "react";
 import { Container } from "./ui/Container";
+import { FiGithub, FiStar, FiActivity, FiCode } from "react-icons/fi";
+
+interface Repo {
+  name: string;
+  description: string;
+  language: string;
+  stargazers_count: number;
+  html_url: string;
+}
 
 export default function GitHubStats() {
-  const [data, setData] = useState<GitHubData | null>(null);
+  const [repos, setRepos] = useState<Repo[]>([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    fetchGitHubStats().then(stats => {
-      setData(stats);
-      setLoading(false);
-    });
+    async function fetchRepos() {
+      try {
+        const response = await fetch("https://api.github.com/users/mahakagarwal7/repos?sort=updated&per_page=6");
+        const data = await response.json();
+        if (Array.isArray(data)) {
+          setRepos(data.filter(r => !r.fork).slice(0, 5));
+        }
+      } catch (error) {
+        console.error("Error fetching GitHub repos:", error);
+      } finally {
+        setLoading(false);
+      }
+    }
+    fetchRepos();
   }, []);
 
-  if (loading || !data) return <GitHubSkeleton />;
-
   return (
-    <section className="py-32 relative overflow-hidden bg-white/[0.01]">
+    <section id="github" className="py-32 relative overflow-hidden bg-bg">
       <Container>
-        <div className="mb-16">
-          <h2 className="text-3xl md:text-5xl font-bold mb-4 tracking-tighter">
-            Developer <span className="text-primary italic">Dashboard</span>
-          </h2>
-          <p className="text-text-secondary max-w-2xl">
-            Real-time synchronization with GitHub to track engineering activity, 
-            open-source contributions, and language distribution.
+        <div className="mb-20 space-y-4">
+          <div className="flex items-center gap-4">
+            <FiGithub size={32} className="text-primary" />
+            <h2 className="text-3xl md:text-5xl font-black text-white uppercase tracking-tighter">
+              Open Source <span className="text-primary italic">Protocol</span>
+            </h2>
+          </div>
+          <p className="text-text-secondary max-w-xl">
+            Active contributions to the ecosystem. Tracking development velocity and technical depth.
           </p>
         </div>
 
-        {/* Stats Grid */}
-        <div className="grid grid-cols-2 lg:grid-cols-4 gap-6 mb-12">
-          <StatCard icon={FiActivity} label="Contributions" value={data.stats.contributions} color="text-primary" />
-          <StatCard icon={FiStar} label="Stars Earned" value={data.stats.stars} color="text-yellow-500" />
-          <StatCard icon={FiGitBranch} label="Forks" value={data.stats.forks} color="text-blue-500" />
-          <StatCard icon={FiUsers} label="Followers" value={data.stats.followers} color="text-purple-500" />
-        </div>
-
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-12">
-          {/* Heatmap & Activity */}
-          <div className="lg:col-span-2 space-y-12">
-            <div className="p-8 bg-surface/30 backdrop-blur-xl border border-white/5 rounded-[40px]">
-              <div className="flex items-center justify-between mb-8">
-                <h3 className="text-sm font-bold tracking-[0.3em] uppercase text-white/50">Commit Velocity</h3>
-                <span className="text-[10px] text-primary font-bold">Last 52 Weeks</span>
-              </div>
-              <div className="flex flex-wrap gap-1">
-                {data.heatmap.map((val, i) => (
-                  <div 
-                    key={i} 
-                    className={`w-3 h-3 rounded-sm transition-colors duration-500 ${
-                      val === 0 ? "bg-white/5" : 
-                      val === 1 ? "bg-primary/20" :
-                      val === 2 ? "bg-primary/40" :
-                      val === 3 ? "bg-primary/60" : "bg-primary"
-                    }`} 
-                    title={`${val} contributions`}
-                  />
-                ))}
-              </div>
-            </div>
-
-            <div className="p-8 bg-surface/30 backdrop-blur-xl border border-white/5 rounded-[40px]">
-              <h3 className="text-sm font-bold tracking-[0.3em] uppercase text-white/50 mb-8">Transmission Log</h3>
-              <div className="space-y-6">
-                {data.activity.map((act, i) => (
-                  <div key={i} className="flex items-start gap-4 group">
-                    <div className="mt-1 p-2 bg-white/5 rounded-lg text-primary group-hover:bg-primary group-hover:text-bg transition-all">
-                      <FiActivity size={14} />
-                    </div>
-                    <div>
-                      <div className="text-sm font-bold text-white group-hover:text-primary transition-colors">
-                        {act.action} in <span className="text-primary/70">{act.repo}</span>
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
+          {/* Top Repos */}
+          <div className="space-y-6">
+            <h3 className="text-xs font-black text-white/40 uppercase tracking-[0.3em] flex items-center gap-3">
+              <FiCode className="text-primary" /> Top Repositories
+            </h3>
+            <div className="space-y-4">
+              {loading ? (
+                [1, 2, 3].map(i => <div key={i} className="h-24 bg-white/5 animate-pulse rounded-3xl" />)
+              ) : (
+                repos.map((repo, idx) => (
+                  <motion.a
+                    key={repo.name}
+                    href={repo.html_url}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    initial={{ opacity: 0, x: -20 }}
+                    whileInView={{ opacity: 1, x: 0 }}
+                    transition={{ delay: idx * 0.1 }}
+                    className="block p-6 bg-surface border border-white/5 rounded-3xl hover:border-primary/30 transition-all group"
+                  >
+                    <div className="flex justify-between items-start">
+                      <h4 className="text-white font-bold group-hover:text-primary transition-colors truncate">{repo.name}</h4>
+                      <div className="flex items-center gap-2 text-white/40 text-xs">
+                        <FiStar className="text-primary" /> {repo.stargazers_count}
                       </div>
-                      <div className="text-[10px] text-text-secondary uppercase tracking-widest mt-1">{act.date}</div>
                     </div>
-                  </div>
-                ))}
-              </div>
+                    <p className="text-xs text-text-secondary mt-2 line-clamp-1">{repo.description}</p>
+                    <div className="text-[10px] font-bold text-primary mt-3 uppercase tracking-widest">{repo.language}</div>
+                  </motion.a>
+                ))
+              )}
             </div>
           </div>
 
-          {/* Languages */}
-          <div className="p-8 bg-surface/30 backdrop-blur-xl border border-white/5 rounded-[40px] flex flex-col">
-            <h3 className="text-sm font-bold tracking-[0.3em] uppercase text-white/50 mb-10">Language Protocol</h3>
-            <div className="space-y-8 flex-grow">
-              {data.languages.map((lang, i) => (
-                <div key={i}>
-                  <div className="flex justify-between text-xs font-bold mb-3 uppercase tracking-widest">
-                    <span>{lang.name}</span>
-                    <span className="text-primary">{lang.percentage}%</span>
-                  </div>
-                  <div className="h-1.5 w-full bg-white/5 rounded-full overflow-hidden">
-                    <motion.div 
-                      initial={{ width: 0 }}
-                      animate={{ width: `${lang.percentage}%` }}
-                      transition={{ duration: 1, delay: i * 0.1 }}
-                      className="h-full bg-primary rounded-full shadow-[0_0_10px_rgba(0,255,163,0.5)]"
-                    />
-                  </div>
-                </div>
-              ))}
+          {/* Activity / Link */}
+          <div className="flex flex-col justify-center items-center p-12 bg-surface/30 border border-white/5 rounded-[40px] text-center space-y-8">
+            <div className="p-8 bg-primary/10 rounded-full">
+              <FiActivity size={64} className="text-primary animate-pulse" />
             </div>
-            
-            <div className="mt-12 pt-12 border-t border-white/5 text-center">
-              <button 
-                onClick={() => window.open('https://github.com/mahakagarwal7', '_blank')}
-                className="text-[10px] font-bold tracking-[0.3em] uppercase text-primary hover:text-white transition-colors"
-              >
-                OPEN SECURE PROFILE →
-              </button>
+            <div className="space-y-4">
+              <h3 className="text-3xl font-black text-white uppercase tracking-tighter">mahakagarwal7</h3>
+              <p className="text-sm text-text-secondary max-w-xs mx-auto">
+                Explore the full development history, commit logs, and research artifacts on GitHub.
+              </p>
             </div>
+            <a 
+              href="https://github.com/mahakagarwal7"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="px-10 py-4 bg-primary text-bg font-black uppercase text-xs tracking-[0.2em] rounded-full hover:scale-105 transition-transform"
+            >
+              Go to Profile
+            </a>
           </div>
-        </div>
-      </Container>
-    </section>
-  );
-}
-
-function StatCard({ icon: Icon, label, value, color }: any) {
-  return (
-    <div className="p-6 bg-surface/30 backdrop-blur-xl border border-white/5 rounded-3xl group hover:border-primary/20 transition-all">
-      <div className={`mb-4 p-3 bg-white/5 rounded-2xl w-fit ${color} group-hover:scale-110 transition-transform`}>
-        <Icon size={20} />
-      </div>
-      <div className="text-2xl font-black text-white mb-1">{value}</div>
-      <div className="text-[10px] text-text-secondary uppercase tracking-widest font-bold">{label}</div>
-    </div>
-  );
-}
-
-function GitHubSkeleton() {
-  return (
-    <section className="py-32 opacity-50">
-      <Container>
-        <div className="h-8 w-64 bg-white/5 rounded-lg mb-4 animate-pulse" />
-        <div className="h-4 w-96 bg-white/5 rounded-lg mb-16 animate-pulse" />
-        <div className="grid grid-cols-4 gap-6 mb-12">
-          {[1,2,3,4].map(i => <div key={i} className="h-32 bg-white/5 rounded-3xl animate-pulse" />)}
         </div>
       </Container>
     </section>

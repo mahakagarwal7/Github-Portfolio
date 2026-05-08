@@ -1,126 +1,179 @@
 "use client";
 
-import { motion } from "framer-motion";
-import { SKILLS, GREETING } from "@/data/portfolio";
-import { useScrollAnimations } from "@/hooks/useScrollAnimations";
+import { motion, useScroll, useSpring, useTransform } from "framer-motion";
+import { useRef } from "react";
+import Image from "next/image";
+import { SKILLS } from "@/data/portfolio";
 import { Container } from "./ui/Container";
-import ParallaxLayer from "./ParallaxLayer";
-import TextReveal from "./TextReveal";
-import { FiDownload, FiBookOpen, FiActivity, FiLayers, FiCpu, FiGlobe } from "react-icons/fi";
-import { Button } from "./ui/Button";
+import { 
+  SiPython, SiTypescript, SiJavascript, SiCplusplus, SiPostgresql, 
+  SiSupabase, SiDocker, SiGithub, SiGit, SiReact, SiNextdotjs, 
+  SiFastapi, SiNodedotjs, SiPytorch, SiTensorflow, SiMongodb, 
+  SiRedis, SiVite, SiTailwindcss, SiFirebase, SiLinux, SiDatadog,
+  SiVercel, SiNetlify, SiCloudinary, SiSlack
+} from "react-icons/si";
+import { 
+  FiCode, FiCpu, FiServer, FiLayout, FiDatabase, FiSettings, FiTerminal, FiBox 
+} from "react-icons/fi";
+
+const CATEGORY_ICON_MAP: Record<string, any> = {
+  "Languages": FiCode,
+  "AI/ML": FiCpu,
+  "Backend & APIs": FiServer,
+  "Frontend": FiLayout,
+  "Databases": FiDatabase,
+  "DevOps & Tools": FiSettings,
+  "Core CS": FiTerminal,
+};
+
+const CATEGORY_IMAGE_MAP: Record<string, string> = {
+  "Languages": "/skills/languages.png",
+  "AI/ML": "/skills/ai_ml.png",
+  "Backend & APIs": "/skills/backend.png",
+  "Frontend": "/skills/frontend.png",
+  "Databases": "/skills/databases.png",
+  "DevOps & Tools": "/skills/devops.png",
+  "Core CS": "/skills/core_cs.png",
+};
+
+const SKILL_ICON_MAP: Record<string, any> = {
+  "Python": SiPython,
+  "TypeScript": SiTypescript,
+  "JavaScript": SiJavascript,
+  "C++": SiCplusplus,
+  "PostgreSQL": SiPostgresql,
+  "Supabase": SiSupabase,
+  "Docker": SiDocker,
+  "GitHub": SiGithub,
+  "Git": SiGit,
+  "React.js": SiReact,
+  "Next.js": SiNextdotjs,
+  "FastAPI": SiFastapi,
+  "Node.js": SiNodedotjs,
+  "PyTorch": SiPytorch,
+  "NoSQL": SiMongodb,
+  "Vite": SiVite,
+  "Tailwind CSS": SiTailwindcss,
+  "Firebase": SiFirebase,
+  "Linux CLI": SiLinux,
+  "Datadog": SiDatadog,
+  "Cloudinary": SiCloudinary,
+  "Slack": SiSlack,
+  "Vercel": SiVercel,
+  "Netlify": SiNetlify,
+};
 
 export default function Skills() {
-  useScrollAnimations();
+  const containerRef = useRef<HTMLDivElement>(null);
+  const { scrollYProgress } = useScroll({
+    target: containerRef,
+    offset: ["start end", "end start"]
+  });
+
+  const lineHeight = useSpring(useTransform(scrollYProgress, [0, 0.8], ["0%", "100%"]), {
+    stiffness: 100,
+    damping: 30,
+    restDelta: 0.001
+  });
 
   return (
-    <section id="skills" className="relative py-32 overflow-hidden perspective-[1000px]">
+    <section id="skills" ref={containerRef} className="py-32 relative overflow-hidden bg-bg">
       <Container>
-        {/* Header & Download CTA */}
-        <div className="flex flex-col md:flex-row md:items-end justify-between mb-20 gap-8 layer-content">
-          <div className="max-w-2xl">
-            <h2 className="text-3xl md:text-5xl font-bold mb-4 tracking-tighter">
-              Technical <span className="text-primary italic"><TextReveal text="Arsenal" delay={0.3} /></span>
+        <div className="space-y-32">
+          {/* Header */}
+          <div className="space-y-6 text-center">
+            <h2 className="text-5xl md:text-8xl font-black text-white uppercase tracking-tighter">
+              Technical <span className="text-primary italic">Arsenal</span>
             </h2>
-            <p className="text-text-secondary">
-              A comprehensive bento-grid overview of my expertise in AI research, 
-              scalable backend architectures, and production DevOps.
+            <p className="text-white/40 max-w-2xl mx-auto text-lg uppercase font-bold tracking-[0.2em]">
+              Architecting the future with a world-class technology stack.
             </p>
           </div>
-          <Button 
-            variant="outline" 
-            size="sm" 
-            className="gap-2 self-start md:self-auto group border-primary/20 hover:border-primary transition-all"
-            onClick={() => window.open(GREETING.resumeLink, '_blank')}
-          >
-            <FiDownload className="group-hover:translate-y-0.5 transition-transform" /> 
-            DOWNLOAD SKILLS PDF
-          </Button>
-        </div>
-        
-        {/* Bento Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-4 lg:grid-cols-6 gap-6">
-          {SKILLS.map((group, idx) => (
-            <motion.div 
-              key={idx}
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              transition={{ delay: idx * 0.1 }}
-              viewport={{ once: true }}
-              className={`p-8 rounded-[40px] bg-surface/30 backdrop-blur-xl border border-white/5 relative overflow-hidden group hover:border-primary/20 transition-all duration-500 shadow-2xl ${
-                idx === 0 ? "md:col-span-2 lg:col-span-3" : 
-                idx === 1 ? "md:col-span-2 lg:col-span-3" :
-                idx === 2 ? "md:col-span-2 lg:col-span-2" :
-                "md:col-span-2 lg:col-span-4"
-              }`}
-            >
-              <div className="absolute top-0 right-0 w-32 h-32 bg-primary/5 rounded-full blur-3xl opacity-0 group-hover:opacity-100 transition-opacity" />
-              
-              <div className="flex items-center gap-3 mb-10">
-                <div className="p-2 bg-primary/10 rounded-lg text-primary">
-                  {idx === 0 && <FiCpu />}
-                  {idx === 1 && <FiLayers />}
-                  {idx === 2 && <FiGlobe />}
-                  {idx === 3 && <FiActivity />}
-                </div>
-                <h3 className="text-primary font-bold text-xs tracking-[0.3em] uppercase">
-                  {group.category}
-                </h3>
-              </div>
 
-              <div className="space-y-8">
-                {group.items.map((skill: any, i: number) => (
-                  <div key={i} className="group/skill">
-                    <div className="flex justify-between items-end mb-2">
-                      <div className="flex items-center gap-2">
-                        <span className="text-white font-medium text-sm group-hover/skill:text-primary transition-colors">
-                          {skill.name}
-                        </span>
-                        {skill.learning && (
-                          <span className="flex items-center gap-1 px-2 py-0.5 bg-yellow-500/10 text-yellow-500 text-[8px] font-bold rounded-full uppercase tracking-tighter">
-                            <FiBookOpen size={8} /> Learning
-                          </span>
-                        )}
+          <div className="relative max-w-6xl mx-auto px-4 sm:px-10">
+            {/* Central Vertical Line */}
+            <div className="absolute left-1/2 -translate-x-1/2 top-0 bottom-0 w-[2px] bg-white/5 hidden md:block">
+              <motion.div 
+                style={{ height: lineHeight }}
+                className="w-full bg-gradient-to-b from-primary via-primary to-transparent shadow-[0_0_20px_rgba(0,255,163,0.5)]" 
+              />
+            </div>
+
+            {/* Timeline Items */}
+            <div className="space-y-24">
+              {SKILLS.map((category, idx) => {
+                const CategoryIcon = CATEGORY_ICON_MAP[category.category] || FiBox;
+                const isEven = idx % 2 === 0;
+
+                return (
+                  <div key={category.category} className={`flex flex-col md:flex-row items-center gap-12 ${isEven ? 'md:flex-row' : 'md:flex-row-reverse'}`}>
+                    {/* Card Content */}
+                    <motion.div
+                      initial={{ opacity: 0, x: isEven ? -50 : 50 }}
+                      whileInView={{ opacity: 1, x: 0 }}
+                      viewport={{ once: true, margin: "-100px" }}
+                      transition={{ duration: 0.8, ease: "easeOut" }}
+                      className="w-full md:w-[calc(50%-48px)] group"
+                    >
+                      <div className="relative p-1 rounded-[2.5rem] bg-gradient-to-br from-white/10 to-transparent hover:from-primary/20 transition-all duration-700 overflow-hidden">
+                        <div className="h-full bg-surface/90 backdrop-blur-3xl rounded-[2.4rem] border border-white/5 overflow-hidden">
+                          {/* Category Image Header */}
+                          <div className="h-40 relative overflow-hidden">
+                            <Image 
+                              src={CATEGORY_IMAGE_MAP[category.category] || "/skills/default.png"} 
+                              alt={category.category}
+                              fill
+                              className="object-cover opacity-60 group-hover:opacity-100 group-hover:scale-110 transition-all duration-1000"
+                            />
+                            <div className="absolute inset-0 bg-gradient-to-t from-surface to-transparent" />
+                            <div className="absolute bottom-6 left-8 flex items-center gap-4">
+                              <div className="p-3 bg-black/50 backdrop-blur-md rounded-2xl text-primary border border-white/10">
+                                <CategoryIcon className="text-2xl" />
+                              </div>
+                              <h3 className="text-xl font-black text-white uppercase tracking-tight">
+                                {category.category}
+                              </h3>
+                            </div>
+                          </div>
+
+                          {/* Skill List */}
+                          <div className="p-8">
+                            <div className="flex flex-wrap gap-2.5">
+                              {category.items.map((skill) => {
+                                const SkillIcon = SKILL_ICON_MAP[skill];
+                                return (
+                                  <div 
+                                    key={skill}
+                                    className="flex items-center gap-2 px-3 py-1.5 bg-white/5 border border-white/5 rounded-lg text-[10px] font-bold text-white/50 uppercase tracking-wider hover:text-primary hover:border-primary/30 transition-all cursor-default"
+                                  >
+                                    {SkillIcon && <SkillIcon className="text-xs" />}
+                                    {skill}
+                                  </div>
+                                );
+                              })}
+                            </div>
+                          </div>
+                        </div>
                       </div>
-                      <span className="text-[10px] text-text-secondary font-mono">{skill.level}%</span>
-                    </div>
-                    {/* Proficiency Bar */}
-                    <div className="h-1 w-full bg-white/5 rounded-full overflow-hidden">
+                    </motion.div>
+
+                    {/* Central Indicator Dot */}
+                    <div className="relative z-10 hidden md:block">
                       <motion.div 
-                        initial={{ width: 0 }}
-                        whileInView={{ width: `${skill.level}%` }}
-                        transition={{ duration: 1, delay: 0.5 + (i * 0.1) }}
+                        initial={{ scale: 0 }}
+                        whileInView={{ scale: 1 }}
                         viewport={{ once: true }}
-                        className={`h-full rounded-full ${skill.learning ? 'bg-yellow-500/50' : 'bg-primary'}`}
+                        className="w-6 h-6 rounded-full bg-bg border-4 border-primary shadow-[0_0_20px_rgba(0,255,163,0.5)]" 
                       />
                     </div>
-                  </div>
-                ))}
-              </div>
-            </motion.div>
-          ))}
 
-          {/* Currently Learning Bento Box */}
-          <motion.div 
-            initial={{ opacity: 0, scale: 0.9 }}
-            whileInView={{ opacity: 1, scale: 1 }}
-            viewport={{ once: true }}
-            className="md:col-span-2 lg:col-span-2 p-8 rounded-[40px] bg-primary/5 border border-primary/20 flex flex-col justify-between group hover:bg-primary/10 transition-all duration-500"
-          >
-            <div>
-              <FiBookOpen className="text-primary text-2xl mb-4" />
-              <h3 className="text-lg font-bold text-white mb-2 tracking-tight">Active Research</h3>
-              <p className="text-xs text-text-secondary leading-relaxed mb-6">
-                Exploring large-scale distributed training and sub-graph isomorphism in GNNs.
-              </p>
+                    {/* Spacer for non-card side */}
+                    <div className="hidden md:block w-[calc(50%-48px)]" />
+                  </div>
+                );
+              })}
             </div>
-            <div className="flex flex-wrap gap-2">
-              {['Kubernetes', 'Vector DBs', 'GraphQL'].map(tag => (
-                <span key={tag} className="px-3 py-1 bg-primary/10 rounded-full text-[9px] font-bold text-primary uppercase tracking-widest">
-                  {tag}
-                </span>
-              ))}
-            </div>
-          </motion.div>
+          </div>
         </div>
       </Container>
     </section>

@@ -1,83 +1,90 @@
 "use client";
 
 import { useState, Suspense, lazy } from "react";
-import dynamic from "next/dynamic";
-import LoadingScreen from "@/components/LoadingScreen";
 import Hero from "@/components/Hero";
-import { ErrorBoundary } from "@/components/ErrorBoundary";
+import Loading3D from "@/components/Loading3D";
+import { useScroll, useSpring, motion, AnimatePresence } from "framer-motion";
 
-// Dynamic imports for performance
-const Scene = dynamic(() => import("@/components/Scene"), { ssr: false });
-const About = lazy(() => import("@/components/About"));
-const Experience = lazy(() => import("@/components/Experience"));
-const ResearchSection = lazy(() => import("@/components/ResearchSection"));
-const Achievements = lazy(() => import("@/components/Achievements"));
-const GitHubStats = lazy(() => import("@/components/GitHubStats"));
+// Lazy load non-critical sections
 const Projects = lazy(() => import("@/components/Projects"));
+const Education = lazy(() => import("@/components/Education"));
+const Achievements = lazy(() => import("@/components/Achievements"));
 const Skills = lazy(() => import("@/components/Skills"));
+const GitHubStats = lazy(() => import("@/components/GitHubStats"));
 const Contact = lazy(() => import("@/components/Contact"));
-
-import { useScrollSnap } from "@/hooks/useScrollSnap";
+const SectionDivider = lazy(() => import("@/components/3d/SectionDivider"));
 
 export default function Home() {
-  const [loading, setLoading] = useState(true);
-  useScrollSnap();
+  const [isLoading, setIsLoading] = useState(true);
+  const { scrollYProgress } = useScroll();
+  const scaleX = useSpring(scrollYProgress, {
+    stiffness: 100,
+    damping: 30,
+    restDelta: 0.001
+  });
 
   return (
     <>
-      {loading && <LoadingScreen onComplete={() => setLoading(false)} />}
+      <AnimatePresence mode="wait">
+        {isLoading && (
+          <Loading3D key="loader" onComplete={() => setIsLoading(false)} />
+        )}
+      </AnimatePresence>
       
-      {!loading && (
-        <div className="relative w-full">
-          {/* 3D Scene - Wrapped in ErrorBoundary */}
-          <ErrorBoundary>
-            <Suspense fallback={null}>
-              <Scene />
-            </Suspense>
-          </ErrorBoundary>
-          
-          <Hero />
-          
-          <Suspense fallback={<SectionLoader />}>
-            <About />
-          </Suspense>
-          <Suspense fallback={<SectionLoader />}>
-            <Experience />
-          </Suspense>
-          <Suspense fallback={<SectionLoader />}>
-            <ResearchSection />
-          </Suspense>
-          <Suspense fallback={<SectionLoader />}>
-            <Achievements />
-          </Suspense>
-          <Suspense fallback={<SectionLoader />}>
-            <Projects />
-          </Suspense>
-          <Suspense fallback={<SectionLoader />}>
-            <GitHubStats />
-          </Suspense>
-          <Suspense fallback={<SectionLoader />}>
-            <Skills />
-          </Suspense>
-          <Suspense fallback={<SectionLoader />}>
-            <Contact />
-          </Suspense>
+      {!isLoading && (
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ duration: 1 }}
+        >
+          {/* Scroll Progress Bar */}
+          <motion.div 
+            className="fixed top-0 left-0 right-0 h-1 bg-primary z-[100] origin-left"
+            style={{ scaleX }}
+          />
 
-          <footer className="py-12 text-center border-t border-white/5 bg-[#050505]">
-            <p className="text-text-secondary text-[10px] tracking-[0.3em] font-medium uppercase">
-              &copy; {new Date().getFullYear()} Mahak Agarwal. Built for Scale.
-            </p>
-          </footer>
-        </div>
-      )}
-    </>
+          <Hero />
+      
+      <Suspense fallback={<SectionSkeleton />}>
+        <Projects />
+      </Suspense>
+
+      <Suspense fallback={<SectionSkeleton />}>
+        <SectionDivider />
+        <Education />
+      </Suspense>
+
+      <Suspense fallback={<SectionSkeleton />}>
+        <SectionDivider />
+        <Skills />
+      </Suspense>
+
+      <Suspense fallback={<SectionSkeleton />}>
+        <SectionDivider />
+        <Achievements />
+      </Suspense>
+
+      <Suspense fallback={<SectionSkeleton />}>
+        <SectionDivider />
+        <GitHubStats />
+      </Suspense>
+
+      <Suspense fallback={<SectionSkeleton />}>
+        <SectionDivider />
+        <Contact />
+      </Suspense>
+
+      <footer className="py-12 border-t border-white/5 bg-bg text-center">
+        <p className="text-[10px] font-black text-white/20 uppercase tracking-[0.5em]">
+          Built with Next.js & TypeScript • Mahak Agarwal © 2024
+        </p>
+      </footer>
+    </motion.div>
+  )}
+</>
   );
 }
 
-function SectionLoader() {
-  return (
-    <div className="h-96 flex items-center justify-center">
-      <div className="w-8 h-8 border-2 border-primary/20 border-t-primary rounded-full animate-spin" />
-    </div>
-  );
+function SectionSkeleton() {
+  return <div className="h-screen w-full bg-bg animate-pulse" />;
 }

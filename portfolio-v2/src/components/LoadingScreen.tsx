@@ -44,9 +44,9 @@ export default function LoadingScreen({ onComplete }: { onComplete: () => void }
         <div className="overflow-hidden mb-4">
           <h2 
             ref={textRef}
-            className="text-white text-2xl font-bold opacity-0 translate-y-full tracking-tighter flex items-center gap-2"
+            className="text-white text-3xl font-black opacity-0 translate-y-full tracking-tighter"
           >
-            MAHAK<span className="text-primary font-mono text-sm opacity-50">V2.0</span>
+            MAHAK <span className="text-primary italic">AGARWAL</span>
           </h2>
         </div>
         
@@ -56,8 +56,8 @@ export default function LoadingScreen({ onComplete }: { onComplete: () => void }
         </div>
         
         <div className="mt-4 flex justify-between items-center font-mono text-[10px] text-white/20 uppercase tracking-[0.2em]">
-          <span>Initializing Systems</span>
-          <span className="animate-pulse">Active</span>
+          <span>INITIALIZING RESEARCH PROTOCOL</span>
+          <span className="animate-pulse text-primary/50">OPERATIONAL</span>
         </div>
       </div>
     </div>

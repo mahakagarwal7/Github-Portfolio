@@ -6,10 +6,11 @@ import { motion } from "framer-motion";
 
 const navItems = [
   { id: "home", icon: <FaHome />, label: "Home" },
-  { id: "github-stats", icon: <FaCode />, label: "Stats" },
   { id: "projects", icon: <FaBriefcase />, label: "Projects" },
-  { id: "experience", icon: <FaBriefcase />, label: "Journey" },
+  { id: "education", icon: <FaBriefcase />, label: "Academic" },
   { id: "skills", icon: <FaCode />, label: "Skills" },
+  { id: "achievements", icon: <FaCode />, label: "Achievements" },
+  { id: "github", icon: <FaGithub />, label: "GitHub" },
   { id: "contact", icon: <FaEnvelope />, label: "Contact" },
 ];
 
